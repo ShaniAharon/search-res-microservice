@@ -5,6 +5,8 @@ from typing import List
 import os
 from googlesearch import search
 import uvicorn
+import httpx
+import asyncio
 
 app = FastAPI()
 
@@ -54,7 +56,21 @@ def search_google(query: SearchQuery):
 #Health Check Endpoint
 @app.get("/health")
 def read_health():
+    print('server awake')
     return {"status": "healthy"}
+
+async def keep_awake():
+    while True:
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.get("https://search-res-microservice.onrender.com/health")
+            await asyncio.sleep(600)  # Sleep for 10 minutes
+        except Exception as e:
+            print(f"Error keeping the service awake: {e}")
+
+@app.on_event("startup")
+async def startup_event():
+    asyncio.create_task(keep_awake())
 
 
 

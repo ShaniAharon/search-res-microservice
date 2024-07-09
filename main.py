@@ -47,11 +47,13 @@ def search_google(query: SearchQuery):
     try:
         results = google_search_new(query.query, query.result_n)
         if not results:
-            raise HTTPException(status_code=404, detail="No results found")
+            print(f"No results found")
+            results = []
         print(f'search api{results = }')
         return results
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print(f"Error during search process: {e}")
+        return []
     
 #Health Check Endpoint
 @app.get("/health")

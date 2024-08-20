@@ -59,7 +59,7 @@ def google_search_new(search_query, result_n):
         user_agent = select_random_user_agent()
         headers = {"User-Agent": user_agent}
         
-        for url in search(search_query, num_results=result_n, extra_params=None, headers=headers):
+        for url in search(search_query, num_results=result_n, headers=headers):
             links.append(url)
         return links
     except Exception as e:

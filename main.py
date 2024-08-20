@@ -1,3 +1,5 @@
+import random
+import time
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -33,6 +35,7 @@ def google_search_new(search_query, result_n):
         links = []
         for url in search(search_query, num_results=result_n):
             links.append(url)
+            time.sleep(random.uniform(1, 3))  # Random delay between 1 to 3 seconds
         return links
     except Exception as e:
         print(f"Error during Google search: {e}")

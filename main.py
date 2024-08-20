@@ -1,3 +1,4 @@
+import random
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
@@ -27,11 +28,38 @@ app.add_middleware(
     allow_headers=["*"],  # Allows all headers
 )
 
-#get links 
+# #get links 
+# def google_search_new(search_query, result_n):
+#     try:
+#         links = []
+#         for url in search(search_query, num_results=result_n):
+#             links.append(url)
+#         return links
+#     except Exception as e:
+#         print(f"Error during Google search: {e}")
+#         return []
+
+#test new logic
+# Function to select a random user agent
+def select_random_user_agent():
+    user_agents = [
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/72.0.3626.121 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.157 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36",
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.71 Safari/537.36",
+    ]
+    return random.choice(user_agents)
+
+# Get links with user-agent rotation
 def google_search_new(search_query, result_n):
     try:
         links = []
-        for url in search(search_query, num_results=result_n):
+        user_agent = select_random_user_agent()
+        headers = {"User-Agent": user_agent}
+        
+        for url in search(search_query, num_results=result_n, extra_params=None, headers=headers):
             links.append(url)
         return links
     except Exception as e:
